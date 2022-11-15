@@ -1,16 +1,19 @@
 <template>
-  <Editor :data="state"></Editor>
+  <Editor :modelValue="state"></Editor>
 </template>
 
 <script>
 import data from './data.json'
-import { ref } from 'vue'
+import { ref, provide } from 'vue'
 import Editor from './packages/editor'
+import { registerConfig as config } from './utils/editor-config'
 export default {
   name: 'App',
   components: { Editor },
   setup() {
     const state = ref(data)
+
+    provide('config', config) // 提供一个值，可以被后代组件注入。 将组件提供给子孙组件，可通过inject注入
     return {
       state
     }
