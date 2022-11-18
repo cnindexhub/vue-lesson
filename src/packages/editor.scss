@@ -1,12 +1,17 @@
+body {
+  background-color: #F3F7F9;
+}
 .editor {
   width: 100%;
   height: 100%;
   &-left,&-right{
     position: absolute;
     width: 270px;
-    background:red;
+    background: #fff;
     top: 0;
     bottom: 0;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px 0px rgb(206 215 225 / 50%);
   }
   &-left {
     left: 0;
@@ -51,20 +56,30 @@
     right: 280px;
     left: 280px;
     height: 80px;
-    background: blue;
+    background: #fff;
+    box-shadow: 0 1px 4px 0px rgb(206 215 225 / 50%);
+    border-radius: 10px;
   }
   &-container {
     padding: 80px 270px 0;
     height: 100%;
     box-sizing: border-box;
+    box-shadow: 0 1px 4px 0px rgb(206 215 225 / 50%);
     &-canvas {
       overflow: scroll;
       height: 100%;
       &__content {
         margin: 20px auto;
         position: relative;
-        background: yellow;
+        background: #fff;
+        border-radius: 10px;
       }
     }
   }
+}
+.line-y {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  border-top: 1px dashed red;
 }

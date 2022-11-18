@@ -1,5 +1,5 @@
 <template>
-  <Editor :modelValue="state"></Editor>
+  <Editor v-model:modelValue="state"></Editor>
 </template>
 
 <script>
