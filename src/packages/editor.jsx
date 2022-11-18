@@ -43,14 +43,14 @@ export default defineComponent({
         })
 
         // 绑定鼠标移动事件，记录鼠标移动前鼠标与已选中组件的相对浏览器左上角的坐标位置
-        const { mousedown, markLine } = useBlockDragger(focusData, lastSelectBlock)
+        const { mousedown, markLine } = useBlockDragger(focusData, lastSelectBlock, data)
 
-        return () => <div class="editor">
-            <div class="editor-left">
+        return () => <div className="editor">
+            <div className="editor-left">
                 {/*根据注册列表渲染内容*/}
                 { config.componentList.map(component => (
                     <div
-                        class="editor-left-item"
+                        className="editor-left-item"
                         draggable
                         onDragstart={ e => dragstart(e, component) }
                         onDragend={ dragend }
@@ -60,14 +60,14 @@ export default defineComponent({
                     </div>
                 )) }
             </div>
-            <div class="editor-top">菜单栏</div>
-            <div class="editor-right">属性控制栏目</div>
-            <div class="editor-container">
+            <div className="editor-top">菜单栏</div>
+            <div className="editor-right">属性控制栏目</div>
+            <div className="editor-container">
                 {/*负责产生滚动条*/}
-                <div class="editor-container-canvas">
+                <div className="editor-container-canvas">
                     {/*产生内容区域*/}
                     <div
-                        class="editor-container-canvas__content"
+                        className="editor-container-canvas__content"
                         style={ containerStyles.value }
                         ref={ containerRef }
                         onMousedown={ containerMousedown }
@@ -82,7 +82,8 @@ export default defineComponent({
                                 </EditorBlock>
                             ))
                         }
-                        <div class="line-y" style={{top: markLine.y + 'px'}}></div>
+                        <div className="line-y" style={{top: markLine.y + 'px'}}></div>
+                        <div className="line-x" style={{left: markLine.x + 'px'}}></div>
                     </div>
                 </div>
             </div>
