@@ -1,3 +1,4 @@
+@import '../iconfont/iconfont.css';
 body {
   background-color: #F3F7F9;
 }
@@ -56,9 +57,25 @@ body {
     right: 280px;
     left: 280px;
     height: 80px;
-    background: #fff;
-    box-shadow: 0 1px 4px 0 rgb(206 215 225 / 50%);
     border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &__button {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(0, 0, 0, .3);
+      color: #fff;
+      cursor: pointer;
+      user-select: none;
+      &+& {
+        margin-left: 3px;
+      }
+    }
   }
   &-container {
     padding: 80px 270px 0;

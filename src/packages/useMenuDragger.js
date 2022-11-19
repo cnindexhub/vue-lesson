@@ -1,4 +1,5 @@
-import { ref } from "vue";
+import { ref } from "vue"
+import { events } from './events'
 /*实现菜单的拖放*/
 export default function(containerRef, data) {
 
@@ -37,6 +38,7 @@ export default function(containerRef, data) {
         containerRef.value.addEventListener('dragleave', dragleave)
         containerRef.value.addEventListener('drop', drop)
         currentComponent = component
+        events.emit('start') // 发布start
     }
 
     // 离开
@@ -45,6 +47,7 @@ export default function(containerRef, data) {
         containerRef.value.removeEventListener('dragover', dragover)
         containerRef.value.removeEventListener('dragleave', dragleave)
         containerRef.value.removeEventListener('drop', drop)
+        events.emit('end') // 发布end
     }
 
 

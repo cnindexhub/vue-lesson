@@ -1,5 +1,6 @@
 /* 实现拖拽多个元素的功能 */
 import { reactive } from 'vue'
+import { events } from './events'
 /**
  * 实现拖拽多个元素的功能
  * @param focusData 内容区选中和未选中block
@@ -10,9 +11,11 @@ import { reactive } from 'vue'
 export default function (focusData, lastSelectBlock, data) {
 
     // 组件拖拽前的状态管理
-    let dragState = {}
+    let dragState = {
+        dragging: false
+    }
 
-    const markLine = reactive({x: 0, y: 0})
+    const markLine = reactive({ x: 0, y: 0 })
 
     // 实现拖拽多个元素的功能
     const mousedown = (e) => {
@@ -22,6 +25,7 @@ export default function (focusData, lastSelectBlock, data) {
         const lines = { x: [], y: [] }
 
         dragState = {
+            dragging: false,
             startY: e.clientY,
             startX: e.clientX,
             dragStartLeft: lastSelectBlock.value.left,
@@ -65,6 +69,10 @@ export default function (focusData, lastSelectBlock, data) {
     }
     const mousemove = (e) => {
         let { clientX: moveX, clientY: moveY } = e
+        if (!dragState.dragging) {
+            dragState.dragging = true
+            events.emit('start')
+        }
         let top = moveY - dragState.startY + dragState.dragStartTop
         let left = moveX - dragState.startX + dragState.dragStartLeft
         let x,y = 0
@@ -98,6 +106,9 @@ export default function (focusData, lastSelectBlock, data) {
         document.removeEventListener('mouseup', mouseup)
         markLine.y = 0
         markLine.x = 0
+        if (dragState.dragging) { // 如果只是点击就不会触发
+            events.emit('end')
+        }
     }
 
     return { mousedown, markLine }
