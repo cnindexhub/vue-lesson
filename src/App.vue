@@ -1,5 +1,5 @@
 <template>
-  <Editor v-model:modelValue="state"></Editor>
+  <Editor v-model:modelValue="state" :formData="formData"></Editor>
 </template>
 
 <script>
@@ -14,8 +14,17 @@ export default {
     const state = ref(data)
 
     provide('config', config) // 提供一个值，可以被后代组件注入。 将组件提供给子孙组件，可通过inject注入
+
+    const formData = ref({
+      username: 'zfjg',
+      password: 123,
+      start: 0,
+      end: 100
+    })
+
     return {
-      state
+      state,
+      formData
     }
   }
 }

@@ -1,13 +1,15 @@
 .editor-block {
   position: absolute;
-  ::after {
+  &::after {
     content: '';
+    cursor: pointer;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
   }
+
   &__focus {
     border: 3px dashed red;
   }

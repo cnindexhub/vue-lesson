@@ -1,7 +1,7 @@
 /*实现内容区组件选中*/
 import { computed, ref } from "vue";
 
-export default function (data, callback) {
+export default function (data, previewRef, callback) {
     // 最后选中的block索引
     const selectBlockIndex = ref(-1)
     // 最后选中的block
@@ -24,8 +24,9 @@ export default function (data, callback) {
 
     // 实现获取焦点
     const blockMousedown = (e, block, index) => {
-        e.preventDefault();
-        e.stopPropagation();
+        if (previewRef.value) return
+        e.preventDefault()
+        e.stopPropagation()
         if (!e.shiftKey) {
             if (!block.focus) {
                 // 清空其他已选择的block
@@ -46,6 +47,7 @@ export default function (data, callback) {
 
     // 点击内容区清空block选中状态
     const containerMousedown = (e) => {
+        if (previewRef.value) return
         clearBlockFocus()
         selectBlockIndex.value = -1
     }
@@ -54,6 +56,7 @@ export default function (data, callback) {
         blockMousedown,
         containerMousedown,
         focusData,
-        lastSelectBlock
+        lastSelectBlock,
+        clearBlockFocus
     }
 }

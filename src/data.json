@@ -1,11 +1,152 @@
 {
   "container": {
-      "width": 550,
-      "height": 550
+    "width": 550,
+    "height": 550
   },
   "blocks": [
-    {"top": 100, "left":  100, "zIndex": 1, "key":  "text"},
-    {"top": 200, "left":  100, "zIndex": 1, "key":  "button"},
-    {"top": 300, "left":  100, "zIndex": 1, "key":  "input"}
+    {
+      "top": 145,
+      "left": 40,
+      "zIndex": 1,
+      "key": "text",
+      "props": {
+        "text": "用户名称",
+        "color": "#333333",
+        "size": "14px"
+      },
+      "width": 56,
+      "height": 21,
+      "focus": false
+    },
+    {
+      "top": 485,
+      "left": 451,
+      "zIndex": 1,
+      "key": "button",
+      "props": {
+        "text": "提交",
+        "type": "primary",
+        "size": "mini"
+      },
+      "width": 60,
+      "height": 32,
+      "focus": false
+    },
+    {
+      "top": 166,
+      "left": 40,
+      "zIndex": 1,
+      "key": "input",
+      "props": {
+        "text": "我的输入框",
+        "type": "text",
+        "size": "mini"
+      },
+      "model": {
+        "default": "username"
+      },
+      "width": 192,
+      "height": 32,
+      "focus": false
+    },
+    {
+      "top": 263.5,
+      "left": 40,
+      "zIndex": 1,
+      "key": "select",
+      "alignCenter": false,
+      "props": {
+        "options": [
+          {
+            "label": "男",
+            "value": "1"
+          },
+          {
+            "label": "女",
+            "value": "0"
+          }
+        ]
+      },
+      "model": {
+        "default": "sex"
+      },
+      "width": 214,
+      "height": 32,
+      "focus": false
+    },
+    {
+      "top": 166,
+      "left": 299,
+      "zIndex": 1,
+      "key": "input",
+      "alignCenter": false,
+      "props": {},
+      "model": {
+        "default": "password"
+      },
+      "width": 192,
+      "height": 32,
+      "focus": false
+    },
+    {
+      "top": 145,
+      "left": 299,
+      "zIndex": 1,
+      "key": "text",
+      "alignCenter": false,
+      "props": {
+        "size": "14px",
+        "text": "用户密码"
+      },
+      "model": {},
+      "width": 56,
+      "height": 21,
+      "focus": false
+    },
+    {
+      "top": 242.5,
+      "left": 40,
+      "zIndex": 1,
+      "key": "text",
+      "alignCenter": false,
+      "props": {
+        "size": "14px",
+        "text": "性别"
+      },
+      "model": {},
+      "width": 28,
+      "height": 21,
+      "focus": false
+    },
+    {
+      "top": 485,
+      "left": 370,
+      "zIndex": 1,
+      "key": "button",
+      "alignCenter": false,
+      "props": {
+        "text": "取消",
+        "size": "mini"
+      },
+      "model": {},
+      "width": 60,
+      "height": 32,
+      "focus": false
+    },
+    {
+      "top": 53.5,
+      "left": 243,
+      "zIndex": 1,
+      "key": "text",
+      "alignCenter": false,
+      "props": {
+        "text": "用户信息",
+        "size": "24px"
+      },
+      "model": {},
+      "width": 96,
+      "height": 31,
+      "focus": false
+    }
   ]
 }

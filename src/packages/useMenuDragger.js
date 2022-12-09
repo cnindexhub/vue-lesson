@@ -21,7 +21,9 @@ export default function(containerRef, data) {
                 left: e.offsetX,
                 zIndex: 1,
                 key: currentComponent.key,
-                alignCenter: true // 希望松手的时候能够让鼠标在组件内居中
+                alignCenter: true, // 希望松手的时候能够让鼠标在组件内居中
+                props: {},
+                model: {}
             }]
         }
         currentComponent = null

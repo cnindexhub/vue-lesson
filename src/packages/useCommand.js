@@ -1,7 +1,8 @@
 import deepcopy from 'deepcopy'
 import { events } from './events'
 import { onUnmounted } from 'vue'
-export function useCommand (data) {
+export function useCommand(data, focusData) {
+
     const state = { // 前进后退需要指针
         current: -1, // 前进后退的索引值
         queue: [], // 存放所有的操作命令
@@ -12,8 +13,8 @@ export function useCommand (data) {
 
     const registry = (command) => {
         state.commandArray.push(command)
-        state.commands[command.name] = () => { // 命令名字对应执行函数
-            const { redo, undo } = command.execute()
+        state.commands[command.name] = (...args) => { // 命令名字对应执行函数
+            const { redo, undo } = command.execute(...args)
             redo()
             if (!command.pushQueue) {
                 return
@@ -26,7 +27,6 @@ export function useCommand (data) {
             // 保存指令的前进后退
             queue.push({ redo, undo })
             state.current = current + 1
-            console.log(state.queue)
         }
     }
 
@@ -46,6 +46,7 @@ export function useCommand (data) {
             }
         }
     })
+
     registry({
         name: 'undo',
         keyboard: 'ctrl+z',
@@ -58,6 +59,140 @@ export function useCommand (data) {
                         item.undo && item.undo()
                         state.current--
                     }
+                }
+            }
+        }
+    })
+
+    // 带有历史记录的常用的模式
+    registry({
+        name: 'updateContainer',
+        pushQueue: true,
+        execute(newValue) {
+            let state = {
+                before: data.value,
+                after: newValue
+            }
+            return {
+                redo() {
+                    data.value = state.after
+                },
+                undo() {
+                    data.value = state.before
+                }
+            }
+        }
+    })
+
+    // 置顶操作
+    registry({
+        name: 'placeTop',
+        pushQueue: true,
+        execute() {
+            let before = deepcopy(data.value.blocks)
+            let after = (() => { // 置顶就是在所有block中找到zIndex最大
+                let { focus, unFocused } = focusData.value
+                let maxZIndex = unFocused.reduce((prev, block) => {
+                    return Math.max(prev, block.zIndex)
+                }, -Infinity)
+                focus.forEach(block => block.zIndex = maxZIndex + 1) // 让当前选中的比最大的+1 即可
+                return data.value.blocks
+            })();
+            return {
+                undo() {
+                    // 如果当前blocks，前后一致，则不会更新
+                    data.value = { ...data.value, blocks: before }
+                },
+                redo() {
+                    // 如果当前blocks，前后一致，则不会更新
+                    data.value = { ...data.value, blocks: after }
+                }
+            }
+        }
+    })
+
+    // 置底操作
+    registry({
+        name: 'placeBottom',
+        pushQueue: true,
+        execute() {
+            let before = deepcopy(data.value.blocks)
+            let after = (() => { // 置顶就是在所有block中找到zIndex最大
+                let { focus, unFocused } = focusData.value
+                let minZIndex = unFocused.reduce((prev, block) => {
+                    return Math.min(prev, block.zIndex)
+                }, Infinity) -1
+                // 不能直接 -1 因为index 不能出现负值 负值就看不到组件了
+                if (minZIndex < 0) { // 这里如果是负值则让没选中的向上， 自己变成0
+                    const dur = Math.abs(minZIndex)
+                    minZIndex = 0
+                    unFocused.forEach(block => block.zIndex += dur)
+                }
+                // 让当前选中的比最大的+1 即可
+                focus.forEach(block => block.zIndex = minZIndex)
+                return data.value.blocks
+            })();
+            return {
+                undo() {
+                    // 如果当前blocks，前后一致，则不会更新
+                    data.value = { ...data.value, blocks: before }
+                },
+                redo() {
+                    // 如果当前blocks，前后一致，则不会更新
+                    data.value = { ...data.value, blocks: after }
+                }
+            }
+        }
+    })
+
+    /**
+     * 修改组件
+     */
+    registry({
+        name: 'updateBlock',
+        pushQueue: true,
+        execute(oldBlock, newBlock) {
+            let state = {
+                before: data.value.blocks,
+                after: (()=> {
+                    let blocks = [...data.value.blocks]
+                    let index = data.value.blocks.indexOf(oldBlock)
+                    if (index > -1) {
+                        blocks.splice(index, 1, newBlock)
+                    }
+                    return blocks
+                })()
+            }
+            return {
+                undo() {
+                    // 如果当前blocks，前后一致，则不会更新
+                    data.value = { ...data.value, blocks: state.before }
+                },
+                redo() {
+                    // 如果当前blocks，前后一致，则不会更新
+                    data.value = { ...data.value, blocks: state.after }
+                }
+            }
+        }
+    })
+
+    // 删除操作
+    registry({
+        name: 'delete',
+        pushQueue: true,
+        execute() {
+            let state = {
+                before: deepcopy(data.value.blocks),
+                after: focusData.value.unFocused
+            }
+            return {
+                undo() {
+                    // 如果当前blocks，前后一致，则不会更新
+                    data.value = { ...data.value, blocks: state.before }
+                },
+                redo() {
+                    // 如果当前blocks，前后一致，则不会更新
+                    data.value = { ...data.value, blocks: state.after }
                 }
             }
         }
@@ -96,6 +231,7 @@ export function useCommand (data) {
             }
         }
     });
+
     const keyboardEvent = (() => {
         const keyCodes = {
             90: 'z',
@@ -124,6 +260,7 @@ export function useCommand (data) {
         }
         return init
     })();
+
     (() => {
         // 监听键盘事件
         state.destroyArray.push(keyboardEvent())
@@ -133,5 +270,6 @@ export function useCommand (data) {
     onUnmounted(() => { // 清理绑定的事件
         state.destroyArray.forEach(fn => fn && fn())
     })
+
     return state
 }
