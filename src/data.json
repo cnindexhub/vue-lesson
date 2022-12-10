@@ -26,7 +26,7 @@
       "props": {
         "text": "提交",
         "type": "primary",
-        "size": "mini"
+        "size": "default"
       },
       "width": 60,
       "height": 32,
@@ -37,11 +37,6 @@
       "left": 40,
       "zIndex": 1,
       "key": "input",
-      "props": {
-        "text": "我的输入框",
-        "type": "text",
-        "size": "mini"
-      },
       "model": {
         "default": "username"
       },
@@ -126,12 +121,12 @@
       "alignCenter": false,
       "props": {
         "text": "取消",
-        "size": "mini"
+        "size": "default"
       },
       "model": {},
       "width": 60,
       "height": 32,
-      "focus": false
+      "focus": true
     },
     {
       "top": 53.5,

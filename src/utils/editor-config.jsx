@@ -76,7 +76,18 @@ registerConfig.register({
         height: true
     },
     preview: () => <ElButton>预览按钮</ElButton>,
-    render: ({ props }) => <ElButton type={ props.type } size={ props.size }> { props.text || '渲染按钮' } </ElButton>,
+    render: ({ props, size }) => {
+        return <ElButton
+            type={ props.type }
+            size={ props.size }
+            style={{
+                width:size.width + 'px',
+                height:size.height + 'px'
+            }}
+        >
+            { props.text || '渲染按钮' }
+        </ElButton>
+    },
     key: 'button',
     props: {
         text: createInputProps("按钮内容"),
@@ -88,23 +99,26 @@ registerConfig.register({
             { label: '文本', value: 'text' },
         ]),
         size: createSelectProps('按钮尺寸', [
-            { label: '默认', value: '' },
-            { label: '中等', value: 'medium' },
+            { label: '默认', value: 'default' },
+            { label: '大', value: 'large' },
             { label: '小', value: 'small' },
-            { label: '极小', value: 'mini' },
         ])
     }
 })
 
 registerConfig.register({
     label: '输入框',
+    resize: {
+        width: true
+    },
     preview: () => <ElInput placeholder="预览输入框"></ElInput>,
-    render: ({ props, model }) =>
+    render: ({ model, size }) =>
     <ElInput
-        type={ props.type }
-        size={ props.size }
         { ...model.default }
-        placeholder={ props.text || '渲染输入框' }
+        placeholder="渲染输入框"
+        style={{
+            width:size.width + 'px',
+        }}
     ></ElInput>,
     key: 'input',
     model: { // {default: 'username'}
